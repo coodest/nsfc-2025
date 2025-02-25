@@ -1,0 +1,382 @@
+% -------------------------------------------------
+% NSFC 官方只有 Word 模版，民间有南开大学程明明教授的 LaTeX [模版](http://www.latexstudio.net/archives/9308)和南京航空航天大学戴一冕博士的 [iNSFC](https://github.com/YimianDai/iNSFC)模版。
+% 本模版即修改自 2019 年的 iNSFC 模版，原来 iNSFC 已经许久不更新，貌似也没有继续更新计划了【2024年又进行了更新】。
+% 经历 3 年的使用和打磨，特别为 macOS 系统做适配，同时应同行鼓励，对windows系统做适配，这里公布出来给潜在用户做参考。
+% -------------------------------------------------
+\makeatletter
+%------------------------
+%xeCJK包的命令；要放到最前
+%------------------------
+\defaultfontfeatures{Mapping=tex-text}%连字符
+%特殊符号的宽度
+\xeCJKsetwidth{、，。；}{1.08em}%符号宽度，可添加‘’“”
+\xeCJKsetwidth{（）}{1em}%符号宽度，可添加‘’“”
+\xeCJKsetup{%中英文间空格的宽度
+	CJKecglue = \hspace{0.3em},}
+
+%------------------------
+%字体设置
+%------------------------
+\usepackage{fontspec}
+%注意，只有字体本身有粗斜体，或都是粗体斜体都是fake的，才能输出粗斜体
+
+\DeclareOption{windows}{%windows
+%微软楷体字
+\setCJKfamilyfont{WINkai}[%中文
+	Path=./fonts/,
+	AutoFakeSlant=0.3,
+	AutoFakeBold=3,
+	Scale = 0.98%微调字体胖瘦
+	]{simkai.ttf}
+%]{HYKaiTiJ.ttf}
+\newfontfamily{\WINkai}[%英文
+	Path=./fonts/,
+	AutoFakeSlant=0.3,
+	AutoFakeBold=3,
+	]{simkai.ttf}
+%微软宋体
+\setCJKfamilyfont{WINsong}[%中文
+	Path=./fonts/,
+	AutoFakeSlant=0.3,
+	AutoFakeBold=3,
+	]{simsun.ttc}
+\newfontfamily{\WINsong}[%英文
+	Path=./fonts/,
+	AutoFakeSlant=0.3,
+	AutoFakeBold=3,
+	]{TimesNewRoman.ttf}
+\newfontfamily\wingdingsfont{Wingdings.ttf}[Path=./fonts/]
+
+%设置模版字体
+\newcommand{\zhkai}{\CJKfamily{WINkai}}
+\newcommand{\enkai}{\WINkai}
+%
+\newcommand{\zhsong}{\CJKfamily{WINsong}}
+\newcommand{\ensong}{\WINsong}
+}
+
+\DeclareOption{macos}{%macos
+%本机楷体
+\setCJKfamilyfont{MACkai}[%中文
+	BoldFont = * Black,%
+	AutoFakeSlant=0.3,
+	Scale = 0.97%微调字体胖瘦
+	]{Kaiti SC}
+\newfontfamily{\MACkai}[%英文
+	]{Cambria}
+%本机宋体
+\setCJKfamilyfont{MACsong}[%中文
+	UprightFont = * Light,
+	BoldFont = * Bold,
+	AutoFakeSlant=0.3,
+	]{Songti SC}
+\newfontfamily{\MACsong}[%英文
+	]{Cambria}%Times New Roman
+\font\symWingdings = "Wingdings"%
+%本机指开发者自己的macOS电脑
+%- [ ] 系统自带字体：
+%/System/Library/Fonts/
+%/Library/Fonts/
+%- [ ] 随系统更新会更换的字体：
+%/System/Library/Assets类似/com_apple_MobileAsset_Font5类似
+%-若要使用这个字体，需要及时更新MiKTeX字体配置文件~/Library/Application Support/MiKTeX/texmfs/config/fontconfig/config/localfonts2.conf文件内容
+%设置模版字体
+% 默认是macOS系统，使用本机自带字体
+\newcommand{\zhkai}{\CJKfamily{MACkai}}
+\newcommand{\enkai}{\MACkai}
+%
+\newcommand{\zhsong}{\CJKfamily{MACsong}}
+\newcommand{\ensong}{\MACsong}
+}
+
+\ProcessOptions\relax
+%查看本机字体的方式
+%打开程序“字体册.app”，看看本机都有什么字体，修改成对应的字体名称即可。
+
+%\setCJKsansfont[BoldFont=* Medium]{Heiti SC}
+%\setCJKfamilyfont{zhsong}[
+%        UprightFont = * Light,
+%           BoldFont = * Bold,
+%]{Songti SC}
+%\setCJKfamilyfont{zhhei}[BoldFont=* Medium]{Heiti SC}
+
+%\setCJKmainfont[
+%	Path=./fonts/,%系统自带Songti SC
+%	UprightFont = * Light,
+%	BoldFont = * Bold,
+%	AutoFakeSlant=0.3,
+%	BoldItalicFont = Kaiti SC Bold,
+%]{Songti SC}
+%字号
+%初号42pt，小初36pt，一号26pt，小一24pt，二号22pt，小二18pt
+%三号16pt，小三15pt，四号14pt，小四号 12pt，五号 10.5pt
+%小五9pt，六号 7.5pt ，小六6.5pt，七号 5.5pt ，八号5pt
+
+%------------------------
+%xcolor命令
+%------------------------
+%颜色
+\usepackage{xcolor}
+\definecolor{YSFblue}{RGB}{0, 112, 192}
+%\definecolor{YSFblue}{RGB}{0,0,0}
+\definecolor{HighLight}{RGB}{0,31,141}
+
+%------------------------
+%模版部分
+%------------------------
+% For the chapter name like （一）立项依据与研究内容（4000-8000字）
+\let\origchapter\chapter
+\renewcommand\chapter{\@ifstar{\starchapter}{\nostarchapter}}
+\newcommand\nostarchapter[1]{%
+\refstepcounter{chapter}\begingroup
+    \vspace{6pt}
+    \color{YSFblue}\zhkai\enkai\fontsize{14pt}{22pt}\selectfont%
+    \setlength{\baselineskip}{22pt}%最后设置，防止被fontsize中的覆盖
+    \ifnum\value{chapter}=1 %是word没对齐，但是我们还是向word对齐
+        \par\noindent\textbf{\kg{1.6em}（\chinese{chapter}）}#1\par
+    \else
+        \par\noindent\textbf{\kg{2.1em}（\chinese{chapter}）}#1\par
+     \fi
+    \vspace{0pt}
+    \endgroup}
+
+\newcommand\starchapter[1]{\vspace{-1em}\origchapter*{#1}\vspace{-0em}}
+
+% For the section name like 2．项目的研究内容、研究目标，以及拟解决的关键科学问题（此部分为重点阐述内容）；
+\let\origsection\section
+\renewcommand\section{\@ifstar{\starsection}{\nostarsection}}
+\newcommand\nostarsection[1]{%
+    \refstepcounter{section}\begingroup
+%     \vspace{0pt}
+    \color{YSFblue}\zhkai\enkai\fontsize{14pt}{22pt}\selectfont%
+    \setlength{\baselineskip}{22pt}%最后设置，防止被fontsize中的覆盖
+    \par\indent\arabic{section}.#1\par%24年全角点；25年半角点；
+% \vspace{11pt}
+    \endgroup}
+\newcommand\starsection[1]{\origsection*{#1}}
+
+
+%------------------------
+%正文部分的标题
+%------------------------
+\let\origsubsection\subsection
+\renewcommand\subsection{\@ifstar{\starsubsection}{\nostarsubsection}}
+\newcommand\nostarsubsection[1]{%
+    \refstepcounter{subsection}\begingroup\color{HighLight}
+    \vspace{6pt}
+    \zhkai\enkai\fontsize{13pt}{22pt}\selectfont\bfseries%
+    \setlength{\baselineskip}{22pt}%最后设置，防止被fontsize中的覆盖
+    \par\noindent\arabic{section}.\arabic{subsection}#1\par
+    \vspace{2pt}
+    \endgroup}
+%\newcommand\nostarsubsection[1]{\vspace{-1em}\origsubsection*{#1}\vspace{-0em}}
+\newcommand\starsubsection[1]{%
+    \begingroup\color{HighLight}
+    \vspace{6pt}
+    %\stepcounter{subsection}
+    \zhkai\enkai\fontsize{13pt}{22pt}\selectfont\bfseries%
+    \setlength{\baselineskip}{22pt}%最后设置，防止被fontsize中的覆盖
+%    \par\noindent\arabic{section}.\arabic{subsection}#1\par
+    \par\noindent#1\par
+    \vspace{2pt}
+    \endgroup}
+
+\let\origsubsubsection\subsubsection
+\renewcommand\subsubsection{\@ifstar{\starsubsubsection}{\nostarsubsubsection}}
+\newcommand\nostarsubsubsection[1]{%
+    \refstepcounter{subsubsection}\begingroup\color{HighLight}
+%     \vspace{0pt}
+    \zhkai\enkai\fontsize{13pt}{22pt}\selectfont%
+    \setlength{\baselineskip}{22pt}%最后设置，防止被fontsize中的覆盖
+    \par\indent（\arabic{subsubsection}）#1\par%1.1下(1)样式三级标题
+%    \par\noindent\arabic{section}.\arabic{subsection}.\arabic{subsubsection}#1\par%1.1.1样式三级标题
+% \vspace{11pt}
+    \endgroup}
+\newcommand\starsubsubsection[1]{%
+    \refstepcounter{subsubsection}\begingroup\color{HighLight}
+	\vspace{2pt}
+    \zhkai\enkai\fontsize{12.5pt}{22pt}\selectfont%
+    \setlength{\baselineskip}{20pt}%最后设置，防止被fontsize中的覆盖
+    \par\indent#1\par
+    %\vspace{-1pt}
+    \endgroup}
+
+%章节引用格式
+\renewcommand\thesection{\arabic{section}．}%节样式：1.
+\renewcommand\thesubsection{\arabic{section}.\arabic{subsection}}%小节样式：1.1
+\renewcommand\thesubsubsection{\arabic{section}.\arabic{subsection} (\arabic{subsubsection})}%小小节样式：1.1(1)
+%\renewcommand\thesubsubsection{\arabic{section}.\arabic{subsection}.\arabic{subsubsection}}%小小节样式：1.1.1样式
+%------------------------
+%正文段落
+%------------------------
+\newenvironment{MS}%
+	{%\begingroup\zhsong\ensong\fontsize{12.5pt}{22pt}\selectfont%段落：中文宋体，英文宋体
+	\begingroup\zhkai\ensong\fontsize{12.5pt}{23pt}\selectfont%段落：中文楷体，英文宋体
+	\setlength{\baselineskip}{22.1pt}}
+	{\endgroup}
+
+%CTEX包自动引用xeCJK包，文档查看xeCJK
+%------------------------
+%文字标注
+%------------------------
+%CJKunderdot,CJKunderline,CJKunderdblline,CJKunderwave
+\usepackage{xeCJKfntef} %可自动换行的文字下划线
+\newcommand{\textul}[1]{\CJKunderline[skip=false]{#1}}%下划线
+\newcommand{\textull}[1]{\CJKunderdblline[skip=false]{#1}}%下划线
+\newcommand{\textuw}[1]{\CJKunderwave[format=\color{blue},depth=0.35em]{#1}}%下弯线
+\newcommand{\textud}[1]{\CJKunderdot[format=\color{blue},depth=0.35em]{#1}}%下点线
+
+%在Word中我们只要选中孤行控制，Word就不会将一段的第一行或者最后一行放在不同的页面。Latex中好像没有相应的命令。Latex只是尽量防止孤行，当避免孤行会导致大量的页面空白的时候，Latex会放弃避免孤行。我们可以改变孤行的惩罚权重来告诉Latex我们更在乎孤行。有两个参数控制这些：
+%\widowpenalty=4000
+%\clubpenalty=4000
+%其中\widowpentalty是出现尾行分页所产生的惩罚值，\clubpenalty是出现首行分页的惩罚值。默认是150。我把他们都设成4000，就是告诉latex要更努力的减少孤行。如果设定惩罚为10000，就会完全的避免孤行，但是排版会很难看，因为latex会放弃一切的去排除孤行。
+%\widowpenalty=8000
+%\clubpenalty=8000
+
+%------------------------
+%公式、图、表
+%------------------------
+\usepackage{amsmath}
+\usepackage{amssymb}
+% Size of the math equations
+%\DeclareMathSizes{10}{10}{7}{5}
+%\DeclareMathSizes{11}{11}{7.7}{5.5}
+%\DeclareMathSizes{12.5}{11}{8.4}{6}
+%\DeclareMathSizes{13}{13}{9.1}{6.5}
+\DeclareMathSizes{14}{14}{9.8}{7}
+%公式上下间距
+\everydisplay\expandafter{%
+	\the\everydisplay
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+}
+
+
+\usepackage{graphicx}
+\usepackage[subrefformat=parens,labelformat=parens]{subfig} %
+\usepackage{booktabs}
+% \usepackage[citebordercolor = white]{hyperref}
+\usepackage[hidelinks]{hyperref}
+%\hypersetup{colorlinks,linkcolor=black}%引用超链接颜色，可用YSFblue
+\usepackage{cleveref}%须在hyperref后边
+\crefformat{table}{表~#2#1#3}
+\crefformat{figure}{图~#2#1#3}
+\crefformat{equation}{式~（#2#1#3）}
+\usepackage[figurewithin=none]{caption}
+%图题、表头；若想取消加粗，去掉\bfseries
+\DeclareCaptionFont{capfont}{\zhkai\enkai\fontsize{11pt}{22pt}\selectfont\bfseries} % Caption font
+\DeclareCaptionFont{subfont}{\zhkai\enkai\fontsize{11pt}{22pt}\selectfont\bfseries} % Sub-caption font
+\captionsetup{font = capfont}
+\captionsetup[subfigure]{font = subfont}
+\captionsetup[figure]{labelsep=period}
+\captionsetup[table]{labelsep=period}
+
+%图标标题的上下间距
+\setlength{\abovecaptionskip}{0pt}  % 修改 caption 与图表上方的距离
+\setlength{\belowcaptionskip}{-10pt} % 修改 caption 与正文的距离
+
+%\numberwithin{figure}{section}%关联图号和章节，应该是每一个section重置一下图号计数器
+\renewcommand {\thefigure}{\arabic{figure}}%图1
+%\renewcommand {\thefigure}{\thesection{}-\arabic{figure}}%图1.1-1
+%如果想修改图中的数字字体，就在对应部分添加\ensong\selectfont\arabic{figure}，或者\enkai\selectfont\arabic{figure}。
+
+\renewcommand {\thetable}{\arabic{table}}%表1
+
+%公式计数器
+\renewcommand{\theequation}
+{\arabic{equation}}%样式：(1)
+%{\thesection{}-\arabic{figure}}%样式：(1.1-1)
+%{\thechapter{}-\arabic{figure}}%样式：(1-1)，注意（一）立项依据里的所有节都是第一章
+%------------------------
+%列表
+%------------------------
+%带圈数字
+%latex自带\textcircled，但是效果很差
+%\usepackage{tikz}
+%\usepackage{etoolbox}
+%\newcommand*{\circled}[1]{\lower.7ex\hbox{\tikz\draw (0pt, 0pt)%
+%    circle (.5em) node {\makebox[1em][c]{\small #1}};}}
+%\robustify{\circled}
+%\begin{enumerate}[label=\circled{\arabic*}]
+%\end{enumerate}
+
+%\renewcommand{\labelitemi}{\color{HighLight}\symWingdings\XeTeXglyph153}%第一层
+
+\usepackage{enumitem}%有序列表
+\setenumerate[1]{itemsep = 0pt, parsep = 0pt, topsep = 2bp}
+\setitemize[1]{itemsep = -2pt, parsep = 0pt, topsep = 2bp}
+%------------------------
+%程序代码
+%------------------------
+\usepackage{listings}
+%------------------------
+%脚注
+%------------------------
+%脚注分割横线
+\newskip\@footindent
+\@footindent=1em
+\renewcommand\footnoterule{\vspace{6pt}\kern-3\p@ \hrule height 0.8pt width 0.4\columnwidth \kern 2.6\p@\vspace{2pt}}
+%脚注引用数字
+\renewcommand\thefootnote{\textcircled{\enkai\fontsize{7pt}{15pt}\selectfont\arabic{footnote}}}
+%脚注字体
+\let\oldfootnotesize\footnotesize
+\renewcommand*{\footnotesize}{\oldfootnotesize\zhkai\enkai\fontsize{11pt}{15pt}\selectfont}
+%------------------------
+%高亮、参考文献
+%------------------------
+\newcommand{\highlight}[1]{
+	\textcolor{HighLight}{{\bfseries#1}}}
+
+\usepackage[square,numbers,sort&compress]{natbib}
+%上标引用
+\newcommand{\citess}[1]{\textsuperscript{\cite{#1}}}
+
+\setlength{\bibsep}{5pt plus 0.3ex}%bib条目间距
+\renewcommand\bibsection{\section*{%
+	{\zhkai\enkai\fontsize{12pt}{22pt}\selectfont%
+	\setlength{\baselineskip}{20pt}}}}%参考文献}}}
+\newenvironment{REF}%
+	{\begingroup
+	\zhkai\ensong\fontsize{12pt}{22pt}\selectfont
+	\setlength{\baselineskip}{15pt}}
+	{\endgroup}
+\renewcommand{\bibfont}{%
+	\zhkai\ensong\fontsize{11.5pt}{18pt}\selectfont%
+	\setlength{\baselineskip}{15pt}}
+
+\renewcommand{\ttfamily}{\ensong\selectfont}%参考文献中的链接字体用的是texttt
+
+% \setlength{\baselineskip}{22pt}
+%
+%% Prof. Mingming Chen's definition on subsection
+%\def\cvprsubsection{\@startsection {subsection}{2}{\z@}
+%   {11pt plus 2pt minus 2pt}{6pt} {\indent \bfseries \songti}}
+%\def\cvprssubsect#1{\cvprsubsection*{#1}}
+%\def\cvprsubsect#1{\cvprsubsection{\hskip -1em.~#1 \vspace{-0.2em}}}
+%\def\subsection{\@ifstar\cvprssubsect\cvprsubsect}
+
+
+%------------------------
+%一些排版的间距
+%------------------------
+%段间距
+\setlength{\parskip}{0.1\baselineskip}
+%自动段落的行间距微调
+\usepackage{setspace}
+\setstretch{1.6} % 22 bp / 14 pt = 1.571
+%------------------------
+%微调部分文字中字体的胖瘦
+%------------------------
+\newcommand{\ps}[2][0.95]{\scalebox{#1}[1]{#2}}%#1默认取0.95等
+\newcommand{\kg}[1]{\kern#1}%-0.1em；空格
+
+%\excludecomment{MS}%用来对比模版有无变化
+%或者下边这种方法
+%\renewcommand{\input}[1]{\vspace{\baselineskip}}%用来对比模版有无变化
+
+%查看命令的定义
+%\meaning\cite等
+
+\makeatother
