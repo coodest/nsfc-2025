@@ -16,11 +16,29 @@
 \usepackage{comment}
 \usepackage{subfig}
 \usepackage{tikz}
+\usepackage{xparse}
+\usepackage{enumitem}
 
 \pagestyle{empty} % 第二页以后页码空白
 \graphicspath{{figures/}}   % 设置图片所存放的目录
 \begin{document}
 %\thispagestyle{empty} 　　　% 首页页码空白
+
+
+
+\NewDocumentCommand \refalg    { m }{算法~\ref{#1}}
+\NewDocumentCommand \refequ    { m }{公式~\ref{#1}}
+\NewDocumentCommand \reffig    { m }{图~\ref{#1}}
+\NewDocumentCommand \reftab    { m }{表~\ref{#1}}
+\NewDocumentCommand \refsec    { m }{章节\ref{#1}}
+\NewDocumentCommand \refapp    { m }{附录 \ref{#1}}
+\NewDocumentCommand \refdef    { m }{定义 \ref{#1}}
+\NewDocumentCommand \refthm    { m }{定理 \ref{#1}}
+\NewDocumentCommand \refpro    { m }{命题 \ref{#1}}
+\NewDocumentCommand \reflem    { m }{引理 \ref{#1}}
+\NewDocumentCommand \refrem    { m }{备注 \ref{#1}}
+
+
 
 {\centering\zhkai\fontsize{16pt}{21pt}\selectfont
 \setlength{\baselineskip}{21pt}%最后设置，防止被fontsize中的覆盖
